@@ -16,5 +16,11 @@ func main() {
 		id := c.Param("id")
 		return c.String(http.StatusOK, id)
 	})
+	e.GET("/show", func(c echo.Context) error {
+		// Get team and member from the query string
+		team := c.QueryParam("team")
+		member := c.QueryParam("member")
+		return c.String(http.StatusOK, "team:"+team+", member:"+member)
+	})
 	e.Logger.Fatal(e.Start(":1323"))
 }
