@@ -89,6 +89,10 @@ func main() {
 		return c.Stream(http.StatusOK, "image/jpg", f)
 	})
 
+	e.GET("/redirect", func(c echo.Context) error {
+		return c.Redirect(http.StatusMovedPermanently, "https://www.inter.it/jp")
+	})
+
 	e.GET("/users/:id", func(c echo.Context) error {
 		// User ID from path `users/:id`
 		id := c.Param("id")
