@@ -52,7 +52,7 @@ func main() {
 	*/
 
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
+		return c.HTML(http.StatusOK, "<strong>Hello, World!</strong>")
 	})
 	e.GET("/users/:id", func(c echo.Context) error {
 		// User ID from path `users/:id`
