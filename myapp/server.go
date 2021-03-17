@@ -93,10 +93,8 @@ func main() {
 		return c.Redirect(http.StatusMovedPermanently, "https://www.inter.it/jp")
 	})
 
-	e.GET("/users/:id", func(c echo.Context) error {
-		// User ID from path `users/:id`
-		id := c.Param("id")
-		return c.String(http.StatusOK, id)
+	e.Any("/users/*", func(c echo.Context) error {
+		return c.String(http.StatusOK, "any!!")
 	})
 	e.GET("/show", func(c echo.Context) error {
 		// Get team and member from the query string
