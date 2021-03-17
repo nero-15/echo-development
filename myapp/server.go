@@ -76,6 +76,10 @@ func main() {
 		return xml.NewEncoder(c.Response()).Encode(u)
 	})
 
+	e.GET("/file", func(c echo.Context) error {
+		return c.File("img/toka1.jpg")
+	})
+
 	e.GET("/users/:id", func(c echo.Context) error {
 		// User ID from path `users/:id`
 		id := c.Param("id")
