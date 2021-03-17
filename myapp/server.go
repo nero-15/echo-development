@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"net/http"
 	"time"
@@ -63,6 +64,16 @@ func main() {
 		c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSONCharsetUTF8)
 		c.Response().WriteHeader(http.StatusOK)
 		return json.NewEncoder(c.Response()).Encode(u)
+	})
+
+	e.GET("/xml", func(c echo.Context) error {
+		u := &User{
+			Name:  "Jon",
+			Email: "jon@labstack.com",
+		}
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationXMLCharsetUTF8)
+		c.Response().WriteHeader(http.StatusOK)
+		return xml.NewEncoder(c.Response()).Encode(u)
 	})
 
 	e.GET("/users/:id", func(c echo.Context) error {
