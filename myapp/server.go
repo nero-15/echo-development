@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	echo "github.com/labstack/echo/v4"
@@ -78,6 +79,14 @@ func main() {
 
 	e.GET("/file", func(c echo.Context) error {
 		return c.File("img/toka1.jpg")
+	})
+
+	e.GET("/sendStreamFile", func(c echo.Context) error {
+		f, err := os.Open("img/toka1.jpg")
+		if err != nil {
+			return err
+		}
+		return c.Stream(http.StatusOK, "image/jpg", f)
 	})
 
 	e.GET("/users/:id", func(c echo.Context) error {
