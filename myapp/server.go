@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -59,7 +60,9 @@ func main() {
 			Name:  "Jon",
 			Email: "jon@labstack.com",
 		}
-		return c.JSON(http.StatusOK, u)
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSONCharsetUTF8)
+		c.Response().WriteHeader(http.StatusOK)
+		return json.NewEncoder(c.Response()).Encode(u)
 	})
 
 	e.GET("/users/:id", func(c echo.Context) error {
