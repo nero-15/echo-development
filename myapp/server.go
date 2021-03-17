@@ -54,6 +54,14 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, "<strong>Hello, World!</strong>")
 	})
+	e.GET("/json", func(c echo.Context) error {
+		u := &User{
+			Name:  "Jon",
+			Email: "jon@labstack.com",
+		}
+		return c.JSON(http.StatusOK, u)
+	})
+
 	e.GET("/users/:id", func(c echo.Context) error {
 		// User ID from path `users/:id`
 		id := c.Param("id")
