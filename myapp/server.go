@@ -54,6 +54,8 @@ func main() {
 		})
 	*/
 
+	e.Static("/", "assets")
+
 	e.GET("/", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, "<strong>Hello, World!</strong>")
 	})
