@@ -30,26 +30,30 @@ func (c *CustomContext) Bar() {
 	println("bar")
 }
 
-type Template struct {
+// TemplateRenderer is a custom html/template renderer for Echo framework
+type TemplateRenderer struct {
 	templates *template.Template
 }
 
-func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	return t.templates.ExecuteTemplate(w, name, data)
-}
+// Render renders a template document
+func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 
-func Hello(c echo.Context) error {
-	return c.Render(http.StatusOK, "hello.html", "World")
+	// Add global methods if data is a map
+	if viewContext, isMap := data.(map[string]interface{}); isMap {
+		viewContext["reverse"] = c.Echo().Reverse
+	}
+
+	return t.templates.ExecuteTemplate(w, name, data)
 }
 
 func main() {
 
-	t := &Template{
+	e := echo.New()
+
+	renderer := &TemplateRenderer{
 		templates: template.Must(template.ParseGlob("public/views/*.html")),
 	}
-
-	e := echo.New()
-	e.Renderer = t
+	e.Renderer = renderer
 
 	// custom context
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -80,7 +84,12 @@ func main() {
 		return c.HTML(http.StatusOK, "<strong>Hello, World!</strong>")
 	})
 
-	e.GET("/hello", Hello)
+	// Named route "foobar"
+	e.GET("/something", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "template.html", map[string]interface{}{
+			"name": "Dolly!",
+		})
+	}).Name = "foobar"
 
 	e.GET("/json", func(c echo.Context) error {
 		u := &User{
