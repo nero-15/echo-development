@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"html/template"
+	"io"
 	"net/http"
 	"os"
 	"time"
@@ -28,8 +30,26 @@ func (c *CustomContext) Bar() {
 	println("bar")
 }
 
+type Template struct {
+	templates *template.Template
+}
+
+func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
+}
+
+func Hello(c echo.Context) error {
+	return c.Render(http.StatusOK, "hello.html", "World")
+}
+
 func main() {
+
+	t := &Template{
+		templates: template.Must(template.ParseGlob("public/views/*.html")),
+	}
+
 	e := echo.New()
+	e.Renderer = t
 
 	// custom context
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -59,6 +79,9 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, "<strong>Hello, World!</strong>")
 	})
+
+	e.GET("/hello", Hello)
+
 	e.GET("/json", func(c echo.Context) error {
 		u := &User{
 			Name:  "Jon",
