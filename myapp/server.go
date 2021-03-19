@@ -78,6 +78,7 @@ func main() {
 	e.Use(middleware.BodyDump(func(c echo.Context, reqBody, resBody []byte) {
 		fmt.Fprintf(os.Stderr, "Request: %v\n", string(reqBody))
 	}))
+	e.Use(middleware.BodyLimit("2M")) //BodyLimit
 
 	e.Static("/", "assets")
 
