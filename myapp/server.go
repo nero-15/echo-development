@@ -64,18 +64,15 @@ func main() {
 	})
 
 	/*
-		e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
-			return func(c echo.Context) error {
-				// Extract the credentials from HTTP request header and perform a security
-				// check
-
-				// For invalid credentials
-				return echo.NewHTTPError(http.StatusUnauthorized, "Please provide valid credentials")
-
-				// For valid credentials call next
-				// return next(c)
+		//Basic Auth Middleware
+		e.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+			// Be careful to use constant time comparison to prevent timing attacks
+			if subtle.ConstantTimeCompare([]byte(username), []byte("nero")) == 1 &&
+				subtle.ConstantTimeCompare([]byte(password), []byte("nero")) == 1 {
+				return true, nil
 			}
-		})
+			return false, nil
+		}))
 	*/
 
 	e.Static("/", "assets")
