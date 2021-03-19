@@ -88,6 +88,7 @@ func main() {
 	// e.Pre(middleware.HTTPSRedirect())
 	e.Use(middleware.Secure())
 	e.Use(middleware.Timeout())
+	e.Pre(middleware.RemoveTrailingSlash())
 
 	e.Static("/", "assets")
 
