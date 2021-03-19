@@ -75,12 +75,13 @@ func main() {
 			return false, nil
 		}))
 	*/
-	e.Use(middleware.BodyDump(func(c echo.Context, reqBody, resBody []byte) {
-		fmt.Fprintf(os.Stderr, "Request: %v\n", string(reqBody))
-	}))
 	e.Use(middleware.BodyLimit("2M")) //BodyLimit
 	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
 		Level: 5,
+	}))
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: `"time":"${time_unix}","id":"${id}","remote_ip":"${remote_ip}","host":"${host}",` +
+			`"method":"${method}","uri":"${uri}","status":${status},"error":"${error}"` + "\n",
 	}))
 
 	e.Static("/", "assets")
