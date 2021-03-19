@@ -11,6 +11,7 @@ import (
 	"time"
 
 	echo "github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type User struct {
@@ -74,6 +75,9 @@ func main() {
 			return false, nil
 		}))
 	*/
+	e.Use(middleware.BodyDump(func(c echo.Context, reqBody, resBody []byte) {
+		fmt.Fprintf(os.Stderr, "Request: %v\n", string(reqBody))
+	}))
 
 	e.Static("/", "assets")
 
