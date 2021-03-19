@@ -86,6 +86,7 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(20)))
 	// e.Pre(middleware.HTTPSRedirect())
+	e.Use(middleware.Secure())
 
 	e.Static("/", "assets")
 
