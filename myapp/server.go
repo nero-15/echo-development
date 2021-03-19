@@ -79,6 +79,9 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Request: %v\n", string(reqBody))
 	}))
 	e.Use(middleware.BodyLimit("2M")) //BodyLimit
+	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
+		Level: 5,
+	}))
 
 	e.Static("/", "assets")
 
