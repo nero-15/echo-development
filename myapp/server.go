@@ -83,6 +83,7 @@ func main() {
 		Format: `"time":"${time_unix}","id":"${id}","remote_ip":"${remote_ip}","host":"${host}",` +
 			`"method":"${method}","uri":"${uri}","status":${status},"error":"${error}"` + "\n",
 	}))
+	e.Use(middleware.Recover())
 	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(20)))
 	// e.Pre(middleware.HTTPSRedirect())
 
